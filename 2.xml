@@ -1,0 +1,46 @@
+class ListFragment : Fragment() {
+
+    private val movies = listOf(
+        Movie(title = "Титанік", year = 1997, posterUrl = "https://m.media-amazon.com/images/M/MV5BMjEyMjMxMTkwM15BMl5BanBnXkFtZTcwODg0Mzc0Mg@@._V1_UY268_CR0,0,2147483647_AL_.jpg"),
+        Movie(title = "Зоряні війни: Епізод IV - Нова надія", year = 1977, posterUrl = "https://m.media-amazon.com/images/M/MV5BMjM1ODkzNjcxNF5BMl5BanBnXkFtZTcwODc5Mjc4Mg@@._V1_UY268_CR0,0,2147483647_AL_.jpg"),
+        Movie(title = "Форрест Гамп", year = 1994, posterUrl = "https://m.media-amazon.com/images/M/MV5BN2QwYjIyM2EtM2U0MC00MzQ5LWE1YjYtODM0OTdjOWYzY2I3XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY268_CR0,0,2147483647_AL_.jpg"),
+        Movie(title = "Піймати вора", year = 1995, posterUrl = "https://m.media-amazon.com/images/M/MV5BMjQ2MjIzNzUtMTQ2OC00MDY2LWIyZjAtMmI1YjFkYzQ5MTk0XkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UY268_CR0,0,2147483647_AL_.jpg"),
+        Movie(title = "Кримінальне чтиво", year = 1994, posterUrl = "https://m.media-amazon.com/images/M/MV5BMTk2NTIyMjM0NF5BMl5BanBnXkFtZTcwODk5NjI2Mg@@._V1_UY268_CR0,0,2147483647_AL_.jpg")
+    )
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_list, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = MoviesAdapter(movies)
+    }
+
+    private inner class MoviesAdapter(private val movies: List<Movie>) :
+        RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val movie = movies[position]
+
+            holder.titleTextView.text = movie.title
+            holder.yearTextView.text = movie.year.toString()
+            Glide.with(holder.itemView.context)
+                .load(movie.posterUrl)
+                .into(holder.posterImageView)
+        }
+
+        override fun getItemCount(): Int = movies.size
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view
